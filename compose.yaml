@@ -1,26 +1,41 @@
-version: '3'
-
+version: '3.8'
 services:
-###> doctrine/doctrine-bundle ###
-  database:
-    image: postgres:${POSTGRES_VERSION:-16}-alpine
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB:-app}
-      # You should definitely change the password in production
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
-      POSTGRES_USER: ${POSTGRES_USER:-app}
-    healthcheck:
-      test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB:-app}", "-U", "${POSTGRES_USER:-app}"]
-      timeout: 5s
-      retries: 5
-      start_period: 60s
+  etalik_app:
+    depends_on:
+      - etalik_db
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile
+    working_dir: /var/www/html
+    container_name: etalik_app
+    ports:
+      - "8888:80"
+    extra_hosts:
+      - host.docker.internal:host-gateway
     volumes:
-      - database_data:/var/lib/postgresql/data:rw
-      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/db/data:/var/lib/postgresql/data:rw
+      - ./docker/vhosts:/etc/apache2/sites-enabled
+      - .:/var/www/html
+      - ./docker/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ./docker/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
+      - ./docker/xdebug.log:/var/www/xdebug.log
+    restart: always
+
+  ###> doctrine/doctrine-bundle ###
+  etalik_db:
+    image: 'mariadb:10.5'
+    container_name: etalik_db
+    restart: always
+    environment:
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'root'
+      MYSQL_DATABASE: 'test'
+      MYSQL_ROOT_PASSWORD: 'root'
+    volumes:
+      - etalik_db-db-data:/var/lib/mysql/
+    ports:
+      - '3312:3306'
+
 ###< doctrine/doctrine-bundle ###
 
 volumes:
-###> doctrine/doctrine-bundle ###
-  database_data:
-###< doctrine/doctrine-bundle ###
+  etalik_db-db-data:
