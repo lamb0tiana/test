@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Types;
+namespace App\TypeDefinition;
 
 enum FieldType: int
 {

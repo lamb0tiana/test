@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\FieldRepository;
-use App\Types\FieldType;
+use App\TypeDefinition\FieldType;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FieldRepository::class)]
