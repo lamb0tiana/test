@@ -28,7 +28,7 @@ services:
     environment:
       MYSQL_USER: 'user'
       MYSQL_PASSWORD: 'root'
-      MYSQL_DATABASE: 'test'
+      MYSQL_DATABASE: 'form'
       MYSQL_ROOT_PASSWORD: 'root'
     volumes:
       - etalik_db-db-data:/var/lib/mysql/
