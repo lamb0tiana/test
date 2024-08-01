@@ -7,7 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
+use App\TypeDefinition\FieldType as Options;
 class FieldType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -16,7 +16,13 @@ class FieldType extends AbstractType
             ->add('label')
             ->add('type', ChoiceType::class, [
                 'choices' => [
-                    'Text' => \App\TypeDefinition\FieldType::Text,
+                    'Text' => Options::Text,
+                    'Textarea' => Options::Textarea,
+                    'Choice' => Options::Choice,
+                    'Date' => Options::Date,
+                    'Boolean' => Options::Boolean,
+                    'Number' => Options::Number,
+                    'Select' => Options::Select,
                 ]
             ]);
     }

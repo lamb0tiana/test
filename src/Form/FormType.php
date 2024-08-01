@@ -15,6 +15,7 @@ class FormType extends AbstractType
         $builder
             ->add('name')
             ->add('fields', CollectionType::class, [
+                'entry_type' => FieldType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
             ])
