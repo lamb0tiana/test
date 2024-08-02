@@ -13,7 +13,7 @@ window.onload = () => {
     document.querySelector('#fields_container button')?.addEventListener('click', function (e){
         const count = document.querySelectorAll('#fields_container>div').length
         const regex = /\<div id="form_fields___name__"\>|(?:<\/div>)$/gm;
-        const template = _prototype.replace(regex,'').replaceAll('__name__',count.toString())
+        const template = _prototype.replace(regex,'').replace(/__name__/g,count.toString())
         document.querySelector('#fields_container button')?.insertAdjacentHTML('beforebegin',template);
         document.querySelector('#fields_container > div:last-of-type >div')?.insertAdjacentHTML('beforeend', '<button onclick="deleteRow(this)">supprimer</button>')
     })
