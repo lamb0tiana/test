@@ -41,6 +41,12 @@ const getSanitizedTemplate = (): string => {
     .replace(/\<div id="form_fields___name__"\>|(?:<\/div>)$/gm, '')
     .replace(/__name__/g, count.toString())
 }
+const checkIsSomeFieldsAreNotFilled = () =>
+  Array.from(
+    document.querySelectorAll<HTMLInputElement | HTMLSelectElement>(
+      'input,select'
+    )
+  ).filter((e) => !e.value).length !== 0
 
 /**
  * Adds a new field row to the DOM.
@@ -48,14 +54,18 @@ const getSanitizedTemplate = (): string => {
  * @return {void} This function does not return anything.
  */
 const addField = (): void => {
-  const fieldset = document.createElement('fieldset')
-  fieldset.innerHTML = getSanitizedTemplate()
+  if (!checkIsSomeFieldsAreNotFilled()) {
+    const fieldset = document.createElement('fieldset')
+    fieldset.innerHTML = getSanitizedTemplate()
 
-  const div = fieldset.querySelector('select')
-  div?.insertAdjacentElement('afterend', getDeleteButtonCTA())
+    const div = fieldset.querySelector('select')
+    div?.insertAdjacentElement('afterend', getDeleteButtonCTA())
 
-  const container = document.querySelector('#fields_container')
-  container?.insertBefore(fieldset, document.querySelector('#add_row'))
+    const container = document.querySelector('#fields_container')
+    container?.insertBefore(fieldset, document.querySelector('#add_row'))
+  } else {
+    alert('Fill form')
+  }
 }
 
 window.onload = () => {
