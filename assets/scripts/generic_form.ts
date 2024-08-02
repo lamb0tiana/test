@@ -1,3 +1,4 @@
+import '../styles/generic_form.scss'
 const _prototype = (<HTMLInputElement>(
   document.querySelector('[name="prototype"]')
 )).value
@@ -19,7 +20,7 @@ const deleteRow = (el: HTMLButtonElement): void => {
  */
 const getDeleteButtonCTA = (): HTMLButtonElement => {
   const btn = document.createElement('button')
-  const classes = ['btn', 'btn-danger', 'btn-sm', 'mt-']
+  const classes = ['btn', 'btn-danger', 'btn-sm', 'mx-2']
   btn.classList.add(...classes)
   btn.innerText = 'supprimer'
   btn.addEventListener('click', (evt: MouseEvent) =>
@@ -48,7 +49,7 @@ const getSanitizedTemplate = (): string => {
  */
 const addField = (): void => {
   const fieldset = document.createElement('fieldset')
-  fieldset.innerHTML = `<legend>Champ</legend>${getSanitizedTemplate()}`
+  fieldset.innerHTML = getSanitizedTemplate()
 
   const div = fieldset.querySelector('select')
   div?.insertAdjacentElement('afterend', getDeleteButtonCTA())
