@@ -13,13 +13,15 @@ class FormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
+            ->add('name', null, [
+                'label' => false,
+                'attr' => ['placeholder' => 'Nom du formulaire']
+            ])
             ->add('fields', CollectionType::class, [
                 'entry_type' => FieldType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

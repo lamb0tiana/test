@@ -10,12 +10,12 @@
 </style>
 
 <div class="example-wrapper">
-    <input type="hidden" name="prototype" value="'{{ prototype }}'" />
+    <input type="hidden" name="prototype" value="{{ prototype }}" />
    {{ form_row(form.name) }}
     {{ prototype | replace({'__name__':0})| raw }}
 
-    <div id="fields_container">
-        <button >Ajouter un champ</button>
+    <div id="fields_container" class="text-center">
+        <button id="add_row"  class="btn btn-secondary btn-sm">Ajouter un champ</button>
     </div>
 </div>
 {% endblock %}
