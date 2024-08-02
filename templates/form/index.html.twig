@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Hello FormController!{% endblock %}
+{% set prototype = form_widget(form.fields.vars.prototype) %}
 
 {% block body %}
 <style>
@@ -9,6 +10,16 @@
 </style>
 
 <div class="example-wrapper">
-   {{ form_row(form) }}
+    <input type="hidden" name="prototype" value="'{{ prototype }}'" />
+   {{ form_row(form.name) }}
+    {{ prototype | replace({'__name__':0})| raw }}
+
+    <div id="fields_container">
+        <button >Ajouter un champ</button>
+    </div>
 </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('generic_form') }}
 {% endblock %}

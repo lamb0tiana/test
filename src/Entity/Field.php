@@ -18,7 +18,7 @@ class Field
     private ?string $label = null;
 
     #[ORM\Column(type: 'integer', length: 1, enumType: FieldType::class)]
-    private ?string $type = null;
+    private ?int $type = null;
 
     #[ORM\ManyToOne(inversedBy: 'fields')]
     #[ORM\JoinColumn(nullable: false)]
@@ -44,12 +44,12 @@ class Field
         return $this;
     }
 
-    public function getType(): ?string
+    public function getType(): ?int
     {
         return $this->type;
     }
 
-    public function setType(string $type): static
+    public function setType(int $type): static
     {
         $this->type = $type;
 
