@@ -61,25 +61,56 @@ const checkIsSomeFieldsAreNotFilled = (): boolean =>
   ).some((e) => !e.value)
 
 /**
+ * Returns an Icon element with the given class list.
+ *
+ * @param classLIst - The list of classes to be added to the element.
+ * @returns The HTML element with the specified classes.
+ */
+const createIcon = (classLIst: string[]): HTMLElement => {
+  const icon = document.createElement('i')
+  icon.classList.add(...classLIst)
+  return icon
+}
+
+/**
+ * Creates a button element with the given class list.
+ *
+ * @param classList The list of classes to be added to the button element.
+ * @return The HTML button element with the specified classes.
+ */
+const createButton = (classList: string[]): HTMLElement => {
+  const btn = document.createElement('button')
+  btn.setAttribute('type', 'button')
+  btn.classList.add(...classList)
+  return btn
+}
+
+/**
  * Defines the structure of the option row for choice field type.
  *
  * @return {HTMLDivElement} The div element containing the option row.
  */
 const getOptionRow = (): HTMLDivElement => {
-  const deleteBtn = document.createElement('button')
   const container = document.createElement('div')
   container.classList.add('d-flex', 'mb-3', 'row-option-item')
   container.innerHTML = _optionPrototype
-
-  deleteBtn.setAttribute('type', 'button')
-  deleteBtn.classList.add('btn', 'btn-danger', 'btn-sm', 'mx-2')
+  const deleteBtn = createButton(['btn', 'btn-danger', 'btn-sm', 'mx-2'])
   deleteBtn.onclick = () => container.remove()
-  const trash = document.createElement('i')
-  trash.classList.add('bi', 'bi-trash3')
-  deleteBtn.appendChild(trash)
+  deleteBtn.appendChild(createIcon(['bi', 'bi-trash3']))
   container.insertAdjacentElement('beforeend', deleteBtn)
 
   return container
+}
+
+/**
+ * Creates a button element for adding an option.
+ *
+ * @return {HTMLButtonElement} The button element for adding an option.
+ */
+const createCTAOptionButton = (): HTMLButtonElement => {
+  const btn = createButton(['btn', 'btn-sm', 'btn-primary', 'cta-btn-option'])
+  btn.appendChild(createIcon(['bi', 'bi-plus']))
+  return btn
 }
 
 /**
@@ -97,9 +128,13 @@ const handleFieldTypeSelection = (el: Event): void => {
   if (typeField === choiceFieldType) {
     //show the option prototype
     fieldset.classList.toggle('d-none')
+    const legend = fieldset.querySelector('legend')
+    legend?.insertAdjacentElement('beforeend', createCTAOptionButton())
     fieldset.appendChild(getOptionRow())
   } else {
-    document.querySelectorAll('.row-option-item').forEach((e) => e.remove())
+    document
+      .querySelectorAll('.row-option-item,.cta-btn-option')
+      .forEach((e) => e.remove())
     fieldset.classList.add('d-none')
   }
 }
