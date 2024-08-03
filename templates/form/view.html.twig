@@ -3,12 +3,41 @@
 {% block body %}
     {{ parent() }}
     <div class="container">
-        <div class="list-group">
+        <form method="post">
             {% for fields in form.fields.toArray %}
-            <div class="form-group">
-                <input class="form-control mb-1" placeholder="{{ fields.label }}" type="{{ constant('App\\Form\\FieldType::options')[fields.type] | lower}}">
-            </div>
+                {% set _type = constant('App\\Form\\FieldType::options')[fields.type] | lower %}
+                {% set id = 'field_'~ fields.id %}
+                {% set label = fields.label | capitalize %}
+                {% set isExpanded = fields.fieldAttributes.expanded %}
+                {% set isRequired = fields.fieldAttributes.required %}
+                <div class="form-group">
+                    <label for="{{ 'field_' ~ fields.id }}">{{ label }}</label>
+                    {% if fields.type == constant('App\\TypeDefinition\\FieldType::Textarea').value %}
+                        <textarea name="{{ id }}" {{ isRequired ? 'required' }} id="{{ id }}" class="form-control mb-3"
+                                                                placeholder="{{ label }}"></textarea>
+                    {% elseif fields.type == constant('App\\TypeDefinition\\FieldType::Select').value %}
+                        <select id="{{ id }}" name="{{ id }}"
+                                class="form-control" {{ isExpanded? 'multiple' }} {{ isRequired ? 'required' }} >
+                            {% for option in fields.fieldAttributes.options %}
+                                <option value="{{ option }}">{{ option }}</option>
+                            {% endfor %}
+                        </select>
+                    {% elseif fields.type == constant('App\\TypeDefinition\\FieldType::Boolean').value %}
+                        {% for option in fields.fieldAttributes.options %}
+                            <div class="form-check">
+                                <label class="form-check-label" for="{{ id }}">{{ option }}</label>
+                                <input type="radio" name="{{ id }}" id="{{ id }}"
+                                       value="{{ option }}" {{ isRequired ? 'required' }}/>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <input class="form-control mb-3" id="{{ id }}" name="{{ id }}"
+                               placeholder="{{ label }}" {{ isRequired ? 'required' }}
+                               type="{{ _type }}"/>
+                    {% endif %}
+                </div>
             {% endfor %}
-        </div>
+            <input type="submit" class="btn-sm btn btn-primary">
+        </form>
     </div>
 {% endblock %}
