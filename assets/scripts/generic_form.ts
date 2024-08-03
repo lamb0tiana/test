@@ -57,7 +57,13 @@ const checkIsSomeFieldsAreNotFilled = (): boolean =>
     )
   ).some((e) => !e.value)
 
-const handleSelectFieldType = (el: Event) => {
+/**
+ * Handles the change event of the field type selection.
+ *
+ * @param {Event} el - The event object.
+ * @return {void} This function does not return anything.
+ */
+const handleSelectFieldType = (el: Event): void => {
   const elDom = el.target as HTMLInputElement
   const optionsContainer = elDom?.parentElement?.nextElementSibling
   const fieldset = optionsContainer?.querySelector('fieldset')
