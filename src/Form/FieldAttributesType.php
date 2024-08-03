@@ -42,6 +42,8 @@ class FieldAttributesType extends AbstractType
                 'expanded',
                 ChoiceType::class,
                 [
+                    'data' => false,
+                    'row_attr' => ['class' => 'd-none'],
                     'choices' => ['Oui' => true, 'Non' => false],
                     'label' => false,
                     'placeholder' => 'Est-ce multiple ?'

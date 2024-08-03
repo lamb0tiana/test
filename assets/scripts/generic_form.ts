@@ -144,9 +144,11 @@ const handleFieldTypeSelection = (el: Event): void => {
   const fieldset = optionsContainer?.querySelector('fieldset')
   if (!fieldset) return
   const typeField: number | null = +elDom?.value || null
+  const expandedElement = fieldset?.parentElement?.lastElementChild
   if (typeField === choiceFieldType) {
     //show the option prototype
-    fieldset.classList.toggle('d-none')
+    fieldset.classList.remove('d-none')
+    expandedElement?.classList.remove('d-none')
     const legend = fieldset.querySelector('legend')
     legend?.insertAdjacentElement('beforeend', createCTAOptionButton())
     fieldset.appendChild(getOptionRow())
@@ -155,6 +157,7 @@ const handleFieldTypeSelection = (el: Event): void => {
       .querySelectorAll('.row-option-item,.cta-btn-option')
       .forEach((e) => e.remove())
     fieldset.classList.add('d-none')
+    expandedElement?.classList.add('d-none')
   }
 }
 /**
