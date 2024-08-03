@@ -4,7 +4,11 @@
     {{ parent() }}
     <div class="container">
         <div class="list-group">
-            {{ dump(form.fields.toArray) }}
+            {% for fields in form.fields.toArray %}
+            <div class="form-group">
+                <input class="form-control mb-1" placeholder="{{ fields.label }}" type="{{ constant('App\\Form\\FieldType::options')[fields.type] | lower}}">
+            </div>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}
