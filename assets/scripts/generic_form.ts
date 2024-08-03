@@ -1,8 +1,8 @@
 import '../styles/generic_form.scss'
 import { toastError, ToastType } from './toast'
-let index: number = 1
-const _prototype = (<HTMLInputElement>(
-  document.querySelector('[name="prototype"]')
+let index: number = 0
+const _fields_prototype = (<HTMLInputElement>(
+  document.querySelector('[name="fields_prototype"]')
 )).value
 
 /**
@@ -38,16 +38,22 @@ const getDeleteButtonCTA = (): HTMLButtonElement => {
  * @return {string} The sanitized template.
  */
 const getSanitizedTemplate = (): string => {
-  return _prototype
+  return _fields_prototype
     .replace(/\<div id="form_fields___name__"\>|(?:<\/div>)$/gm, '')
-    .replace(/__name__/g, (index++).toString())
+    .replace(/__name__/g, (++index).toString())
 }
-const checkIsSomeFieldsAreNotFilled = () =>
+
+/**
+ * Checks if there are any fields that are not filled.
+ *
+ * @return {boolean} True if there are some fields that are not filled, false otherwise.
+ */
+const checkIsSomeFieldsAreNotFilled = (): boolean =>
   Array.from(
     document.querySelectorAll<HTMLInputElement | HTMLSelectElement>(
       'input,select'
     )
-  ).filter((e) => !e.value).length !== 0
+  ).some((e) => !e.value)
 
 /**
  * Adds a new field row to the DOM.

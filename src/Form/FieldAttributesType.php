@@ -17,6 +17,12 @@ class FieldAttributesType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('options', CollectionType::class, [
+                'entry_type' => TextType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'label' => 'Définir les options',
+            ])
             ->add(
                 'required',
                 ChoiceType::class,
@@ -34,12 +40,7 @@ class FieldAttributesType extends AbstractType
                     'label' => false,
                     'placeholder' => 'Est-ce multiple ?'
                 ]
-            )
-            ->add('options', CollectionType::class, [
-                'entry_type' => TextType::class,
-                'allow_add' => true,
-                'allow_delete' => true
-            ]);
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver): void

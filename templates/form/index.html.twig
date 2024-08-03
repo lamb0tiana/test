@@ -1,19 +1,21 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Hello FormController!{% endblock %}
-{% set prototype = form_widget(form.fields.vars.prototype) %}
+
+{% set attribute_option_prototype = form_widget(form.fields.vars.prototype.children.fieldAttributes.children.options.vars.prototype) %}
+{% set fields_prototype = form_widget(form.fields.vars.prototype) %}
 
 {% block body %}
-
-
     <div class="container form-container">
         {{ form_start(form) }}
-        <input type="hidden" name="prototype" value="{{ prototype }}"/>
+        <input type="hidden" name="fields_prototype" value="{{ fields_prototype }}"/>
+        <input type="hidden" name="attribute_option_prototype" value="{{ attribute_option_prototype }}"/>
 
         <div id="fields_container">
+            {{ form_row(form.name) }}
             <div class="field-row">
-                {{ form_row(form.name) }}
-                {{ prototype | replace({'__name__':0})| raw }}
+
+                {{ fields_prototype | replace({'__name__':0})| raw }}
             </div>
             <hr/>
 
