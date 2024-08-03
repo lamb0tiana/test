@@ -1,9 +1,10 @@
 {% extends 'base.html.twig' %}
-{% block title %}Form View{% endblock %}
+{% set slug = app.request.attributes.get('slug') %}
+{% block title %}Form View [{{ slug }}]{% endblock %}
 {% block body %}
     {{ parent() }}
     <div class="container">
-        <form method="post">
+        <form method="post" action="{{ path('answer_form', {slug}) }}">
             {% for fields in form.fields.toArray %}
                 {% set _type = constant('App\\Form\\FieldType::options')[fields.type] | lower %}
                 {% set id = 'field_'~ fields.id %}
@@ -11,7 +12,7 @@
                 {% set isExpanded = fields.fieldAttributes.expanded %}
                 {% set isRequired = fields.fieldAttributes.required %}
                 <div class="form-group">
-                    <label for="{{ 'field_' ~ fields.id }}">{{ label }}</label>
+                    <label for="{{ id }}">{{ label }}</label>
                     {% if fields.type == constant('App\\TypeDefinition\\FieldType::Textarea').value %}
                         <textarea name="{{ id }}" {{ isRequired ? 'required' }} id="{{ id }}" class="form-control mb-3"
                                                                 placeholder="{{ label }}"></textarea>

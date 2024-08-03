@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\FieldRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FieldRepository::class)]
@@ -25,6 +27,17 @@ class Field
 
     #[ORM\OneToOne(mappedBy: 'Field', cascade: ['persist', 'remove'])]
     private ?FieldAttributes $fieldAttributes = null;
+
+    /**
+     * @var Collection<int, Anwser>
+     */
+    #[ORM\OneToMany(targetEntity: Anwser::class, mappedBy: 'field', orphanRemoval: true)]
+    private Collection $anwsers;
+
+    public function __construct()
+    {
+        $this->anwsers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -85,6 +98,36 @@ class Field
         }
 
         $this->fieldAttributes = $fieldAttributes;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Anwser>
+     */
+    public function getAnwsers(): Collection
+    {
+        return $this->anwsers;
+    }
+
+    public function addAnwser(Anwser $anwser): static
+    {
+        if (!$this->anwsers->contains($anwser)) {
+            $this->anwsers->add($anwser);
+            $anwser->setField($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnwser(Anwser $anwser): static
+    {
+        if ($this->anwsers->removeElement($anwser)) {
+            // set the owning side to null (unless already changed)
+            if ($anwser->getField() === $this) {
+                $anwser->setField(null);
+            }
+        }
 
         return $this;
     }

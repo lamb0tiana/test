@@ -2,7 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Form;
+use App\Entity\Anwser;
+use App\Entity\Field;
 use App\Entity\Form as Model;
 use App\Form\FormType;
 use App\Repository\FormRepository;
@@ -44,8 +45,29 @@ class FormController extends AbstractController
     }
 
     #[Route('/page/{slug}', name: 'view_form')]
-    public function view(#[MapEntity(mapping: ['slug' => 'slug'])] ?Form $form)
+    public function view(#[MapEntity(mapping: ['slug' => 'slug'])] ?Model $form)
     {
         return !$form ? $this->redirectToRoute('home') : $this->render('form/view.html.twig', ['form' => $form]);
+    }
+
+    #[Route('/answer/{slug}', name: 'answer_form', methods: [Request::METHOD_POST])]
+    public function persistAnwser(#[MapEntity(mapping: ['slug' => 'slug'])] ?Model $model, Request $request, EntityManagerInterface $entityManager)
+    {
+        if (!$model) {
+            return $this->redirectToRoute('home');
+        }
+        $posts = $request->request->all();
+        $fieldRepository = $entityManager->getRepository(Field::class);
+        array_walk($posts, function ($value, $key) use ($fieldRepository, $entityManager, $model) {
+            $anwser = new Anwser();
+            $fieldId = str_replace('field_', '', $key);
+            $field = $fieldRepository->find($fieldId);
+            $anwser->setField($field);
+            $anwser->setValue($value);
+            $entityManager->persist($anwser);
+        });
+        $entityManager->flush();
+        $this->addFlash('success', true);
+        return $this->redirectToRoute('home');
     }
 }
