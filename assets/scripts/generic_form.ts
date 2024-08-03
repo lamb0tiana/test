@@ -12,7 +12,7 @@ const _prototype = (<HTMLInputElement>(
  * @return {void} This function does not return anything.
  */
 const deleteRow = (el: HTMLButtonElement): void => {
-  el.closest('fieldset')?.remove()
+  el.closest('div')?.remove()
 }
 
 /**
@@ -57,14 +57,15 @@ const checkIsSomeFieldsAreNotFilled = () =>
  */
 const addField = (): void => {
   if (!checkIsSomeFieldsAreNotFilled()) {
-    const fieldset = document.createElement('fieldset')
-    fieldset.innerHTML = getSanitizedTemplate()
+    const divSection = document.createElement('div')
+    divSection.classList.add('field_row')
+    divSection.innerHTML = getSanitizedTemplate()
 
-    const div = fieldset.querySelector('select')
-    div?.insertAdjacentElement('afterend', getDeleteButtonCTA())
-
+    divSection?.querySelector('fieldset')?.appendChild(getDeleteButtonCTA())
     const container = document.querySelector('#fields_container')
-    container?.insertBefore(fieldset, document.querySelector('#add_row'))
+    container?.insertBefore(divSection, document.querySelector('#add_row'))
+    const hr = document.createElement('hr')
+    divSection.insertAdjacentElement('afterend', hr)
   } else {
     toastError({
       message: 'Merci de bien remplir le formulaire',

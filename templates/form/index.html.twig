@@ -9,10 +9,14 @@
     <div class="container form-container">
         {{ form_start(form) }}
         <input type="hidden" name="prototype" value="{{ prototype }}"/>
-        {{ form_row(form.name) }}
-        {{ prototype | replace({'__name__':0})| raw }}
-<hr/>
-        <div id="fields_container" class="text-center">
+
+        <div id="fields_container">
+            <div class="field-row">
+                {{ form_row(form.name) }}
+                {{ prototype | replace({'__name__':0})| raw }}
+            </div>
+            <hr/>
+
             <button id="add_row" class="btn btn-secondary btn-sm" type="button">Ajouter un champ</button>
         </div>
         {{ form_row(form._token) }}

@@ -1,8 +1,6 @@
-#fields_container> fieldset {
-  border: 1px dotted;
+#fields_container> .field_row {
   margin: 2em auto;
-  padding: 2em;
-  border-radius: 14px;
+  padding: 1em ;
   &:hover{
     background: rgba(24, 239, 41, 0.49);
   }
