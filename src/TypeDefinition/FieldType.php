@@ -8,7 +8,6 @@ enum FieldType: int
     case Textarea = 1;
     case Number = 2;
     case Date = 3;
-    case Select = 4;
-    case Choice = 5;
-    case Boolean = 6;
+    case Choice = 4;
+    case Boolean = 5;
 }

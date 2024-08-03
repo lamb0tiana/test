@@ -22,6 +22,7 @@ class FieldAttributesType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'label' => 'Définir les options',
+                'row_attr' => ['class' => 'd-none options-row'],
             ])
             ->add(
                 'required',
