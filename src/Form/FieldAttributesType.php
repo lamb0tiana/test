@@ -14,6 +14,7 @@ class FieldAttributesType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        // I defined the name of the prototype as __option_row__  as I need to set the index and not to be confused with parent name
         $builder
             ->add('options', CollectionType::class, [
                 'entry_type' => TextType::class,
@@ -21,11 +22,12 @@ class FieldAttributesType extends AbstractType
                 'allow_delete' => true,
                 'label' => 'Définir les options',
                 'row_attr' => ['class' => 'd-none'],
+                'prototype_name' => '__option_row__',
                 'entry_options' => [
                     'attr' => [
-                        'placeholder' => 'Option __name__',
+                        'placeholder' => 'Option',
                     ],
-                ]
+                ],
             ])
             ->add(
                 'required',

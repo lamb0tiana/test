@@ -1,7 +1,8 @@
 import '../styles/generic_form.scss'
 import { toastError, ToastType } from './toast'
-
-let index: number = 0
+//index of all fields row
+let groupFieldsIndex: number = 0
+let optionFieldIndex: number = 0
 const choiceFieldType: number = 4
 const _fieldsPrototype = (<HTMLInputElement>(
   document.querySelector('[name="fields_prototype"]')
@@ -45,7 +46,7 @@ const getDeleteButtonCTA = (): HTMLButtonElement => {
 const getSanitizedTemplate = (): string => {
   return _fieldsPrototype
     .replace(/\<div id="form_fields___name__"\>|(?:<\/div>)$/gm, '')
-    .replace(/__name__/g, (++index).toString())
+    .replace(/__name__/g, (++groupFieldsIndex).toString())
 }
 
 /**
@@ -99,6 +100,8 @@ const getOptionRow = (): HTMLDivElement => {
   const container = document.createElement('div')
   container.classList.add('d-flex', 'mb-3', 'row-option-item')
   container.innerHTML = _optionPrototype
+    .replace(/__name__/g, groupFieldsIndex.toString())
+    .replace(/__option_row__/g, (++optionFieldIndex).toString())
   const deleteBtn = createButton(['btn', 'btn-danger', 'btn-sm', 'mx-2'])
   deleteBtn.onclick = () => container.remove()
   deleteBtn.appendChild(createIcon(['bi', 'bi-trash3']))
