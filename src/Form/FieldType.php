@@ -11,7 +11,7 @@ use App\TypeDefinition\FieldType as Options;
 
 class FieldType extends AbstractType
 {
-    public const options = [Options::Text->name, Options::Email->name, Options::Textarea->name, Options::Select->name, Options::Date->name, Options::Boolean->name, Options::Number->name];
+    public const options = [Options::Text->name, Options::Textarea->name,  Options::Number->name, Options::Date->name, Options::Select->name, Options::Boolean->name, Options::Email->name];
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

@@ -28,7 +28,7 @@ class FormController extends AbstractController
     {
         $model = new Model();
         $form = $this->createForm(FormType::class, $model);
-        if($request->isMethod(Request::METHOD_POST)) {
+        if ($request->isMethod(Request::METHOD_POST)) {
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 $entityManager->persist($model);
@@ -44,8 +44,8 @@ class FormController extends AbstractController
     }
 
     #[Route('/page/{slug}', name: 'view_form')]
-    public function view(#[MapEntity(mapping: ['slug' => 'slug'])]?Form $form)
+    public function view(#[MapEntity(mapping: ['slug' => 'slug'])] ?Form $form)
     {
-        return $this->render('form/view.html.twig', ['form' => $form]);
+        return !$form ? $this->redirectToRoute('home') : $this->render('form/view.html.twig', ['form' => $form]);
     }
 }
