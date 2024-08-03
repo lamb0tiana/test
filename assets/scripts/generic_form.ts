@@ -6,6 +6,9 @@ const choiceFieldType: number = 4
 const _fieldsPrototype = (<HTMLInputElement>(
   document.querySelector('[name="fields_prototype"]')
 )).value
+const _optionPrototype = (<HTMLInputElement>(
+  document.querySelector('[name="attribute_option_prototype"]')
+)).value
 
 /**
  * Deletes a field row from the DOM.
@@ -58,20 +61,46 @@ const checkIsSomeFieldsAreNotFilled = (): boolean =>
   ).some((e) => !e.value)
 
 /**
+ * Defines the structure of the option row for choice field type.
+ *
+ * @return {HTMLDivElement} The div element containing the option row.
+ */
+const getOptionRow = (): HTMLDivElement => {
+  const deleteBtn = document.createElement('button')
+  const container = document.createElement('div')
+  container.classList.add('d-flex', 'mb-3', 'row-option-item')
+  container.innerHTML = _optionPrototype
+
+  deleteBtn.setAttribute('type', 'button')
+  deleteBtn.classList.add('btn', 'btn-danger', 'btn-sm', 'mx-2')
+  deleteBtn.onclick = () => container.remove()
+  const trash = document.createElement('i')
+  trash.classList.add('bi', 'bi-trash3')
+  deleteBtn.appendChild(trash)
+  container.insertAdjacentElement('beforeend', deleteBtn)
+
+  return container
+}
+
+/**
  * Handles the change event of the field type selection.
  *
  * @param {Event} el - The event object.
  * @return {void} This function does not return anything.
  */
-const handleSelectFieldType = (el: Event): void => {
+const handleFieldTypeSelection = (el: Event): void => {
   const elDom = el.target as HTMLInputElement
   const optionsContainer = elDom?.parentElement?.nextElementSibling
   const fieldset = optionsContainer?.querySelector('fieldset')
+  if (!fieldset) return
   const typeField: number | null = +elDom?.value || null
   if (typeField === choiceFieldType) {
-    fieldset?.classList.toggle('d-none')
+    //show the option prototype
+    fieldset.classList.toggle('d-none')
+    fieldset.appendChild(getOptionRow())
   } else {
-    fieldset?.classList.add('d-none')
+    document.querySelectorAll('.row-option-item').forEach((e) => e.remove())
+    fieldset.classList.add('d-none')
   }
 }
 /**
@@ -93,7 +122,7 @@ const addField = (): void => {
     //handle set option by field type
     divSection
       ?.querySelector('.field-type-selection')
-      ?.addEventListener('change', handleSelectFieldType)
+      ?.addEventListener('change', handleFieldTypeSelection)
   } else {
     toastError({
       message: 'Merci de bien remplir le formulaire',
@@ -108,5 +137,5 @@ window.onload = () => {
   addButton?.addEventListener('click', addField)
   document
     .querySelector('.field-type-selection')
-    ?.addEventListener('change', handleSelectFieldType)
+    ?.addEventListener('change', handleFieldTypeSelection)
 }
