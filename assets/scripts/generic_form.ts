@@ -1,6 +1,6 @@
 import '../styles/generic_form.scss'
 import { toastError, ToastType } from './toast'
-
+let index: number = 1
 const _prototype = (<HTMLInputElement>(
   document.querySelector('[name="prototype"]')
 )).value
@@ -38,10 +38,9 @@ const getDeleteButtonCTA = (): HTMLButtonElement => {
  * @return {string} The sanitized template.
  */
 const getSanitizedTemplate = (): string => {
-  const count = document.querySelectorAll('#fields_container>fieldset').length
   return _prototype
     .replace(/\<div id="form_fields___name__"\>|(?:<\/div>)$/gm, '')
-    .replace(/__name__/g, count.toString())
+    .replace(/__name__/g, (index++).toString())
 }
 const checkIsSomeFieldsAreNotFilled = () =>
   Array.from(
@@ -58,14 +57,14 @@ const checkIsSomeFieldsAreNotFilled = () =>
 const addField = (): void => {
   if (!checkIsSomeFieldsAreNotFilled()) {
     const divSection = document.createElement('div')
-    divSection.classList.add('field_row')
+    divSection.classList.add('field-row')
     divSection.innerHTML = getSanitizedTemplate()
 
     divSection?.querySelector('fieldset')?.appendChild(getDeleteButtonCTA())
     const container = document.querySelector('#fields_container')
     container?.insertBefore(divSection, document.querySelector('#add_row'))
     const hr = document.createElement('hr')
-    divSection.insertAdjacentElement('afterend', hr)
+    divSection.insertAdjacentElement('beforeend', hr)
   } else {
     toastError({
       message: 'Merci de bien remplir le formulaire',
