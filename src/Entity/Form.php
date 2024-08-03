@@ -6,6 +6,7 @@ use App\Repository\FormRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 #[ORM\Entity(repositoryClass: FormRepository::class)]
 class Form
@@ -23,6 +24,9 @@ class Form
      */
     #[ORM\OneToMany(targetEntity: Field::class, mappedBy: 'form', cascade: ['persist'], orphanRemoval: true)]
     private Collection $fields;
+
+    #[ORM\Column(length: 255)]
+    private ?string $slug = null;
 
     public function __construct()
     {
@@ -42,6 +46,8 @@ class Form
     public function setName(string $name): static
     {
         $this->name = $name;
+        $slugger = new AsciiSlugger();
+        $this->slug = $slugger->slug($name)->lower();
 
         return $this;
     }
@@ -72,6 +78,18 @@ class Form
                 $field->setForm(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
 
         return $this;
     }

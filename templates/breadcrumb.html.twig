@@ -2,16 +2,23 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb p-3 bg-body-tertiary rounded-3">
         <li class="breadcrumb-item">
-            <a class="link-body-emphasis text-decoration-none {{ route == 'home' ? 'fw-semibold' }}" href="{{ path('home') }}">
+            <a class="link-body-emphasis text-decoration-none {{ route == 'home' ? 'fw-semibold' }}"
+               href="{{ path('home') }}">
                 <span><i class="bi bi-house-heart"></i></span>
                 <span class="">Form list</span>
             </a>
         </li>
-        <li class="breadcrumb-item">
-            <a class="link-body-emphasis {{ route == 'app_form' ? 'fw-semibold'}} text-decoration-none" href="#">Create form</a>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">
-            Data
-        </li>
+        {% if route == 'create_form' %}
+            <li class="breadcrumb-item">
+                <a class="link-body-emphasis {{ route == 'create_form' ? 'fw-semibold' }} text-decoration-none"
+                   href="{{ path('create_form') }}">Create form</a>
+            </li>
+        {% endif %}
+        {% if (route == 'view_form') %}
+            <li class="breadcrumb-item">
+                <a class="link-body-emphasis {{ route == 'view_form' ? 'fw-semibold' }} text-decoration-none" href="#">View
+                    form ({{ app.request.attributes.get('slug') }})</a>
+            </li>
+        {% endif %}
     </ol>
 </nav>
