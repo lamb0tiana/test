@@ -60,6 +60,11 @@ const checkIsSomeFieldsAreNotFilled = (): boolean =>
     )
   ).some((e) => !e.value)
 
+const checkIsSomeOptionsAreNotFilled = (): boolean =>
+  Array.from(
+    document.querySelectorAll<HTMLInputElement>('.row-option-item>input')
+  ).some((e) => !e.value)
+
 /**
  * Returns an Icon element with the given class list.
  *
@@ -105,11 +110,22 @@ const getOptionRow = (): HTMLDivElement => {
 /**
  * Creates a button element for adding an option.
  *
- * @return {HTMLButtonElement} The button element for adding an option.
+ * @return {HTMLElement} The button element for adding an option.
  */
-const createCTAOptionButton = (): HTMLButtonElement => {
+const createCTAOptionButton = (): HTMLElement => {
   const btn = createButton(['btn', 'btn-sm', 'btn-primary', 'cta-btn-option'])
   btn.appendChild(createIcon(['bi', 'bi-plus']))
+  btn.onclick = () => {
+    if (!checkIsSomeOptionsAreNotFilled()) {
+      btn.parentElement?.parentElement?.appendChild(getOptionRow())
+    } else {
+      toastError({
+        message: 'Renseigner les options',
+        type: ToastType.ERROR,
+        title: 'Erreur Options',
+      })
+    }
+  }
   return btn
 }
 

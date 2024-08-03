@@ -20,7 +20,7 @@ class FieldAttributesType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'label' => 'Définir les options',
-                'row_attr' => ['class' => 'd-none options-row'],
+                'row_attr' => ['class' => 'd-none'],
                 'entry_options' => [
                     'attr' => [
                         'placeholder' => 'Option __name__',
