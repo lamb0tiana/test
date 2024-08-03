@@ -21,6 +21,7 @@ class FieldType extends AbstractType
                 'placeholder' => 'Type de champ',
                 'choices' => [
                     'Text' => Options::Text->value,
+                    'Email' => Options::Email->value,
                     'Textarea' => Options::Textarea->value,
                     'Choice' => Options::Choice->value,
                     'Date' => Options::Date->value,

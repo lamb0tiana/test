@@ -21,7 +21,7 @@ class FieldAttributes
     private ?array $options = null;
 
     #[ORM\Column(nullable: true)]
-    private ?bool $isExpanded = null;
+    private ?bool $expanded = null;
 
     #[ORM\OneToOne(inversedBy: 'fieldAttributes', cascade: ['persist', 'remove'])]
     private ?Field $Field = null;
@@ -55,14 +55,14 @@ class FieldAttributes
         return $this;
     }
 
-    public function isExpanded(): ?bool
+    public function getExpanded(): ?bool
     {
-        return $this->isExpanded;
+        return $this->expanded;
     }
 
     public function setExpanded(?bool $isExpanded): static
     {
-        $this->isExpanded = $isExpanded;
+        $this->expanded = $isExpanded;
 
         return $this;
     }

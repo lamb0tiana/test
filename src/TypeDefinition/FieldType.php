@@ -10,4 +10,5 @@ enum FieldType: int
     case Date = 3;
     case Choice = 4;
     case Boolean = 5;
+    case Email = 6;
 }

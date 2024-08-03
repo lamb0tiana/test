@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\FieldRepository;
-use App\TypeDefinition\FieldType;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FieldRepository::class)]
@@ -17,7 +16,7 @@ class Field
     #[ORM\Column(length: 100)]
     private ?string $label = null;
 
-    #[ORM\Column(type: 'integer', length: 1, enumType: FieldType::class)]
+    #[ORM\Column(type: 'integer', length: 1)]
     private ?int $type = null;
 
     #[ORM\ManyToOne(inversedBy: 'fields')]

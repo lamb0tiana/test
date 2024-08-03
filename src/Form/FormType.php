@@ -18,6 +18,7 @@ class FormType extends AbstractType
                 'attr' => ['placeholder' => 'Nom de la page du formulaire']
             ])
             ->add('fields', CollectionType::class, [
+                'by_reference' => false,
                 'entry_type' => FieldType::class,
                 'allow_add' => true,
                 'allow_delete' => true,

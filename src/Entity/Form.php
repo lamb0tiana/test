@@ -21,7 +21,7 @@ class Form
     /**
      * @var Collection<int, Field>
      */
-    #[ORM\OneToMany(targetEntity: Field::class, mappedBy: 'form', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Field::class, mappedBy: 'form', cascade: ['persist'], orphanRemoval: true)]
     private Collection $fields;
 
     public function __construct()

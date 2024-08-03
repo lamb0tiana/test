@@ -1,11 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello FormController!{% endblock %}
+{% block title %}Create dynamic form page!{% endblock %}
 
 {% set attribute_option_prototype = form_widget(form.fields.vars.prototype.children.fieldAttributes.children.options.vars.prototype) %}
 {% set fields_prototype = form_widget(form.fields.vars.prototype) %}
 
 {% block body %}
+    {{ parent() }}
     <div class="container form-container">
         {{ form_start(form) }}
         <input type="hidden" name="fields_prototype" value="{{ fields_prototype }}"/>
@@ -20,6 +21,7 @@
             <hr/>
 
             <button id="add_row" class="btn btn-secondary btn-sm" type="button">Ajouter un champ</button>
+            <button id="save" class="btn btn-primary btn-sm" type="submit">Sauvegarder</button>
         </div>
         {{ form_row(form._token) }}
 

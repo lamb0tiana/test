@@ -39,7 +39,7 @@ class FieldAttributesType extends AbstractType
                 ]
             )
             ->add(
-                'isExpanded',
+                'expanded',
                 ChoiceType::class,
                 [
                     'choices' => ['Oui' => true, 'Non' => false],
