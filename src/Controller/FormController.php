@@ -47,25 +47,40 @@ class FormController extends AbstractController
     #[Route('/page/{slug}', name: 'view_form')]
     public function view(#[MapEntity(mapping: ['slug' => 'slug'])] ?Model $form)
     {
+        dump($form->getFields()->current()->getAnwsers()->toArray());
         return !$form ? $this->redirectToRoute('home') : $this->render('form/view.html.twig', ['form' => $form]);
     }
 
+    /**
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/answer/{slug}', name: 'answer_form', methods: [Request::METHOD_POST])]
-    public function persistAnwser(#[MapEntity(mapping: ['slug' => 'slug'])] ?Model $model, Request $request, EntityManagerInterface $entityManager)
+    public function persistAnwser(#[MapEntity(mapping: ['slug' => 'slug'])] ?Model $model, Request $request, EntityManagerInterface $entityManager): Response
     {
         if (!$model) {
             return $this->redirectToRoute('home');
         }
+
         $posts = $request->request->all();
         $fieldRepository = $entityManager->getRepository(Field::class);
-        array_walk($posts, function ($value, $key) use ($fieldRepository, $entityManager, $model) {
-            $anwser = new Anwser();
+
+        foreach ($posts as $key => $value) {
             $fieldId = str_replace('field_', '', $key);
             $field = $fieldRepository->find($fieldId);
+
+            if (!$field) {
+                throw $this->createNotFoundException("Field with id {$fieldId} not found");
+            }
+
+            $anwser = new Anwser();
             $anwser->setField($field);
             $anwser->setValue($value);
+
             $entityManager->persist($anwser);
-        });
+        }
+
         $entityManager->flush();
         $this->addFlash('success', true);
         return $this->redirectToRoute('home');

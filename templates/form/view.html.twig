@@ -5,6 +5,11 @@
     {{ parent() }}
     <div class="container">
         <form method="post" action="{{ path('answer_form', {slug}) }}">
+            {% for message in app.flashes('success') %}
+                <div class="flash-notice">
+                    {{ message }}
+                </div>
+            {% endfor %}
             {% for fields in form.fields.toArray %}
                 {% set _type = constant('App\\Form\\FieldType::options')[fields.type] | lower %}
                 {% set id = 'field_'~ fields.id %}
@@ -40,5 +45,15 @@
             {% endfor %}
             <input type="submit" class="btn-sm btn btn-primary">
         </form>
+
+    </div>
+    <div class="container mt-5">
+        <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+                List of answers
+            </a>
+
+        </div>
+        <a href="{{ path('create_form') }}" class="btn btn-secondary btn-sm mt-5">Create form page</a>
     </div>
 {% endblock %}
