@@ -15,7 +15,7 @@ class FormType extends AbstractType
         $builder
             ->add('name', null, [
                 'label' => false,
-                'attr' => ['placeholder' => 'Nom du formulaire']
+                'attr' => ['placeholder' => 'Nom de la page du formulaire']
             ])
             ->add('fields', CollectionType::class, [
                 'entry_type' => FieldType::class,

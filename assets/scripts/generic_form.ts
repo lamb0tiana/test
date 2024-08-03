@@ -1,4 +1,6 @@
 import '../styles/generic_form.scss'
+import { toastError, ToastType } from './toast'
+
 const _prototype = (<HTMLInputElement>(
   document.querySelector('[name="prototype"]')
 )).value
@@ -64,7 +66,11 @@ const addField = (): void => {
     const container = document.querySelector('#fields_container')
     container?.insertBefore(fieldset, document.querySelector('#add_row'))
   } else {
-    alert('Fill form')
+    toastError({
+      message: 'Merci de bien remplir le formulaire',
+      type: ToastType.ERROR,
+      title: 'Erreur !',
+    })
   }
 }
 

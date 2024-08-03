@@ -27,7 +27,8 @@ class FieldType extends AbstractType
                     'Number' => Options::Number,
                     'Select' => Options::Select,
                 ]
-            ]);
+            ])
+        ->add('fieldAttributes', FieldAttributesType::class, ['label' => 'Attributs du champ']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
