@@ -11,6 +11,8 @@ use App\TypeDefinition\FieldType as Options;
 
 class FieldType extends AbstractType
 {
+    public const options = [Options::Text->name, Options::Email->name, Options::Textarea->name, Options::Select->name, Options::Date->name, Options::Boolean->name, Options::Number->name];
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -20,13 +22,13 @@ class FieldType extends AbstractType
                 'attr' => ['class' => 'field-type-selection'],
                 'placeholder' => 'Type de champ',
                 'choices' => [
-                    'Text' => Options::Text->value,
-                    'Email' => Options::Email->value,
-                    'Textarea' => Options::Textarea->value,
-                    'Choice' => Options::Choice->value,
-                    'Date' => Options::Date->value,
-                    'Boolean' => Options::Boolean->value,
-                    'Number' => Options::Number->value,
+                    Options::Text->name => Options::Text->value,
+                    Options::Email->name => Options::Email->value,
+                    Options::Textarea->name => Options::Textarea->value,
+                    Options::Select->name => Options::Select->value,
+                    Options::Date->name => Options::Date->value,
+                    Options::Boolean->name => Options::Boolean->value,
+                    Options::Number->name => Options::Number->value,
                 ]
             ])
             ->add('fieldAttributes', FieldAttributesType::class, ['label' => 'Attributs du champ', 'row_attr' => ['class' => 'attributes-row']]);
