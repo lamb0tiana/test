@@ -4,6 +4,7 @@ import { toastError, ToastType } from './toast'
 let groupFieldsIndex: number = 0
 let optionFieldIndex: number = 0
 const choiceFieldType: number = 4
+const booleanFieldType: number = 5
 const _fieldsPrototype = (<HTMLInputElement>(
   document.querySelector('[name="fields_prototype"]')
 )).value
@@ -145,7 +146,7 @@ const handleFieldTypeSelection = (el: Event): void => {
   if (!fieldset) return
   const typeField: number | null = +elDom?.value || null
   const expandedElement = fieldset?.parentElement?.lastElementChild
-  if (typeField === choiceFieldType) {
+  if (typeField === choiceFieldType || typeField === booleanFieldType) {
     //show the option prototype
     fieldset.classList.remove('d-none')
     expandedElement?.classList.remove('d-none')
