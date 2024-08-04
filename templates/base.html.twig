@@ -17,11 +17,13 @@
 <body>
 {% block body %}{{ include('breadcrumb.html.twig') }}{% endblock %}
 {{ include('toast/toast.html.twig') }}
-
-<footer class=" my-2">
-    <p class="text-center my-4">
-        Developped with &#x1F499; by <a href="mailto:tiana.randrianarivony@gmail.com" class="text-decoration-none">tiana.randrianarivony@gmail.com</a> 😉
+{% if app.request.attributes.get('_route')  == 'home' %}
+<footer class="my-2 text-center position-absolute bottom-0 start-0 end-0" >
+    <p class="my-4">
+        Developped with ❤️ by <a href="mailto:tiana.randrianarivony@gmail.com" class="text-decoration-none">tiana.randrianarivony@gmail.com</a> 😉
     </p>
 </footer>
+{% endif %}
+
 </body>
 </html>
