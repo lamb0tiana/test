@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Anwser;
 use App\Entity\Field;
 use App\Entity\Form;
+use App\Tools\Utils;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -34,6 +35,7 @@ class AnwserRepository extends ServiceEntityRepository
                                     anwser.id as id,
                                     anwser.value as answer,
                                     field.label as field,
+                                    identifier,
                                     DATE_FORMAT(answered_at, "%%d/%%m/%%Y at %%H:%%i") as answered_at
                                 FROM %s anwser INNER JOIN %s field 
                                 ON anwser.field_id = field.id 
@@ -45,7 +47,8 @@ class AnwserRepository extends ServiceEntityRepository
 
         $stmt = $this->getEntityManager()->getConnection()->prepare($query);
         try {
-            return $stmt->executeQuery()->fetchAllAssociative();
+            $results =  $stmt->executeQuery()->fetchAllAssociative();
+            return Utils::groupBy($results, 'identifier');
         } catch (\Exception $e) {
             return [];
         }
