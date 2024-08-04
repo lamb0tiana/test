@@ -3,15 +3,17 @@
 {% block body %}
     {{ parent() }}
     <div class="container">
-        <div class="list-group">
-            <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
-                List of forms
-            </a>
-            {% for form in listForms  %}
-                <a href="{{ path('view_form', {'slug': form.slug}) }}" class="list-group-item list-group-item-action">{{ form.name }} ({{ form.fields|length ~ ' field[s]'}} )</a>
-            {% endfor %}
+        {% if listForms | length >0 %}
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+                    List of forms
+                </a>
+                {% for form in listForms  %}
+                    <a href="{{ path('view_form', {'slug': form.slug}) }}" class="list-group-item list-group-item-action">{{ form.name }} ({{ form.fields|length ~ ' field[s]'}} )</a>
+                {% endfor %}
 
-        </div>
-        <a href="{{ path('create_form') }}" class="btn btn-secondary btn-sm mt-5">Create form page</a>
+            </div>
+        {% endif %}
+        <a href="{{ path('create_form') }}" class="btn btn-secondary btn-sm mt-5">Create a form page</a>
     </div>
 {% endblock %}

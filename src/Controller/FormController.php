@@ -53,9 +53,8 @@ class FormController extends AbstractController
         if (!$form) {
             return $this->redirectToRoute('home');
         }
-        $dd = $repository->getAnwsers($form);
-        dump($dd);
-        return $this->render('form/view.html.twig', ['form' => $form]);
+        $answers = $repository->getAnwsers($form);
+        return $this->render('form/view.html.twig', ['form' => $form, 'answers' => $answers]);
     }
 
 
@@ -74,7 +73,6 @@ class FormController extends AbstractController
     public function persistAnwser(#[MapEntity(mapping: ['slug' => 'slug'])] ?Model $model, Request $request, EntityManagerInterface $entityManager): Response
     {
         if (!$model) {
-            die('ici');
             return $this->redirectToRoute('home');
         }
 
@@ -97,6 +95,6 @@ class FormController extends AbstractController
 
         $entityManager->flush();
         $this->addFlash('success', true);
-        return $this->redirectToRoute('home');
+        return $this->redirectToRoute('view_form', ['slug' => $model->getSlug()]);
     }
 }

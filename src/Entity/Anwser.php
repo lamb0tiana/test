@@ -30,6 +30,7 @@ class Anwser
     {
         $this->answeredAt = new \DateTimeImmutable();
     }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -54,7 +55,7 @@ class Anwser
 
     public function setValue(?string $value): static
     {
-        $this->value = $value;
+        $this->value = trim($value) !== '' ? $value : '-';
 
         return $this;
     }

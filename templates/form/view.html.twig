@@ -1,15 +1,16 @@
 {% extends 'base.html.twig' %}
 {% set slug = app.request.attributes.get('slug') %}
 {% block title %}Form View [{{ slug }}]{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {% if app.flashes('success') | length>0 %}
+        {{ encore_entry_script_tags('success_answer') }}
+    {% endif %}
+{% endblock %}
 {% block body %}
     {{ parent() }}
     <div class="container">
         <form method="post" action="{{ path('answer_form', {slug}) }}">
-            {% for message in app.flashes('success') %}
-                <div class="flash-notice">
-                    {{ message }}
-                </div>
-            {% endfor %}
             {% for fields in form.fields.toArray %}
                 {% set _type = constant('App\\Form\\FieldType::options')[fields.type] | lower %}
                 {% set id = 'field_'~ fields.id %}
@@ -20,7 +21,7 @@
                     <label for="{{ id }}">{{ label }}</label>
                     {% if fields.type == constant('App\\TypeDefinition\\FieldType::Textarea').value %}
                         <textarea name="{{ id }}" {{ isRequired ? 'required' }} id="{{ id }}" class="form-control mb-3"
-                                                                placeholder="{{ label }}"></textarea>
+                                  placeholder="{{ label }}"></textarea>
                     {% elseif fields.type == constant('App\\TypeDefinition\\FieldType::Select').value %}
                         <select id="{{ id }}" name="{{ id }}"
                                 class="form-control" {{ isExpanded? 'multiple' }} {{ isRequired ? 'required' }} >
@@ -43,9 +44,39 @@
                     {% endif %}
                 </div>
             {% endfor %}
-            <input type="submit" class="btn-sm btn btn-primary">
+            <input type="submit" class="btn-sm btn btn-primary mt-3 mb-3">
         </form>
 
     </div>
+    {% if answers|length >0 %}
+        <div class="container mt-5">
+            <h1 class="text-center">Answers</h1>
+            {% for index, rows in answers %}
+                <table class="table table-hover table-responsive my-5" id="{{ index }}">
+                    <caption style="caption-side: top"><a class="text-decoration-none" href="#{{ index }}">
+                            [#{{ index }}]</a> {{ rows|length>0 ? 'at ' ~rows[0].answered_at }} </caption>
+                    <thead class="thead-dark">
+                    <tr class="text-center">
 
+                        {% for row in rows %}
+                            <th scope="col">{{ row.field }}</th>
+                        {% endfor %}
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="text-center">
+                        {% for row in rows %}
+                            <td scope="{{ loop.index ==1 ? 'row' }}">{{ row.answer }}</td>
+                        {% endfor %}
+
+                    </tr>
+
+                    </tbody>
+                </table>
+            {% endfor %}
+
+
+        </div>
+    {% endif %}
 {% endblock %}
