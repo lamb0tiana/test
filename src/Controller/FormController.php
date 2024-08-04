@@ -6,6 +6,7 @@ use App\Entity\Anwser;
 use App\Entity\Field;
 use App\Entity\Form as Model;
 use App\Form\FormType;
+use App\Repository\AnwserRepository;
 use App\Repository\FormRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
@@ -19,7 +20,9 @@ class FormController extends AbstractController
     #[Route('/', name: 'home')]
     public function index(FormRepository $formRepository): Response
     {
-        //I do not write pagination
+        /**
+         * I won't do the pagination query, the goal is not that for this test.
+         */
         $forms = $formRepository->findAll();
         return $this->render('form/listing.html.twig', ['listForms' => $forms]);
     }
@@ -44,20 +47,31 @@ class FormController extends AbstractController
         ]);
     }
 
-    #[Route('/page/{slug}', name: 'view_form')]
-    public function view(#[MapEntity(mapping: ['slug' => 'slug'])] ?Model $form)
+    #[Route('/pages/{slug}', name: 'view_form')]
+    public function view(#[MapEntity(mapping: ['slug' => 'slug'])] ?Model $form, AnwserRepository $repository)
     {
-        dump($form->getFields()->current()->getAnwsers()->toArray());
-        return !$form ? $this->redirectToRoute('home') : $this->render('form/view.html.twig', ['form' => $form]);
+        if (!$form) {
+            return $this->redirectToRoute('home');
+        }
+        $dd = $repository->getAnwsers($form);
+        dump($dd);
+        return $this->render('form/view.html.twig', ['form' => $form]);
     }
 
+
     /**
-     * @param Request $request
-     * @param EntityManagerInterface $entityManager
-     * @return Response
+     * Persist the answers given by the user for a specific form identified by the slug.
+     *
+     * @param Model|null $model the form to which the answers are related
+     * @param Request $request the request containing the answers
+     * @param EntityManagerInterface $entityManager the entity manager
+     *
+     * @return Response the response to redirect to home page
+     *
+     * @throws NotFoundHttpException if a field with the given id is not found
      */
-    #[Route('/answer/{slug}', name: 'answer_form', methods: [Request::METHOD_POST])]
-    public function persistAnwser(#[MapEntity(mapping: ['slug' => 'slug'])] ?Model $model, Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/answers/{slug}', name: 'answer_form', methods: [Request::METHOD_POST])]
+    public function persistAnwser(?Model $model, Request $request, EntityManagerInterface $entityManager): Response
     {
         if (!$model) {
             return $this->redirectToRoute('home');

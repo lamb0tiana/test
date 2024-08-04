@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Anwser;
+use App\Entity\Field;
+use App\Entity\Form;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,28 +18,36 @@ class AnwserRepository extends ServiceEntityRepository
         parent::__construct($registry, Anwser::class);
     }
 
-    //    /**
-    //     * @return Anwser[] Returns an array of Anwser objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('a.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * Retrieve all answers related to a form.
+     * Here I volontary write native query to express my ability of quering natively in doctrine with Symfony and also for the query performance
+     * I won't do the pagination query, the goal is not that for this test.
+     * @param Form $form The form to retrieve answers for.
+     * @return array An array of associative arrays containing the answer id, answer value, field label, and the date the answer was given.
+     */
+    public function getAnwsers(Form $form): array
+    {
+        $table = $this->getClassMetadata()->getTableName();
+        $fieldTable = $this->getEntityManager()->getClassMetadata(Field::class)->getTableName();
+        $query = sprintf(
+            'SELECT 
+                                    anwser.id as id,
+                                    anwser.value as answer,
+                                    field.label as field,
+                                    DATE_FORMAT(answered_at, "%%d/%%m/%%Y at %%H:%%i") as answered_at
+                                FROM %s anwser INNER JOIN %s field 
+                                ON anwser.field_id = field.id 
+                                WHERE field.form_id = %s',
+            $table,
+            $fieldTable,
+            $form->getId()
+        );
 
-    //    public function findOneBySomeField($value): ?Anwser
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        $stmt = $this->getEntityManager()->getConnection()->prepare($query);
+        try {
+            return $stmt->executeQuery()->fetchAllAssociative();
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
 }
