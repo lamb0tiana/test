@@ -23,6 +23,9 @@ class Anwser
     #[ORM\Column]
     private ?\DateTimeImmutable $answeredAt = null;
 
+    #[ORM\Column(length: 10)]
+    private ?string $identifier = null;
+
     public function __construct()
     {
         $this->answeredAt = new \DateTimeImmutable();
@@ -64,6 +67,18 @@ class Anwser
     public function setAnsweredAt(\DateTimeImmutable $answeredAt): static
     {
         $this->answeredAt = $answeredAt;
+
+        return $this;
+    }
+
+    public function getIdentifier(): ?string
+    {
+        return $this->identifier;
+    }
+
+    public function setIdentifier(string $identifier): static
+    {
+        $this->identifier = substr($identifier, 0, 10);
 
         return $this;
     }

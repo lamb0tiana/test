@@ -71,15 +71,16 @@ class FormController extends AbstractController
      * @throws NotFoundHttpException if a field with the given id is not found
      */
     #[Route('/answers/{slug}', name: 'answer_form', methods: [Request::METHOD_POST])]
-    public function persistAnwser(?Model $model, Request $request, EntityManagerInterface $entityManager): Response
+    public function persistAnwser(#[MapEntity(mapping: ['slug' => 'slug'])] ?Model $model, Request $request, EntityManagerInterface $entityManager): Response
     {
         if (!$model) {
+            die('ici');
             return $this->redirectToRoute('home');
         }
 
         $posts = $request->request->all();
         $fieldRepository = $entityManager->getRepository(Field::class);
-
+        $uuid = uniqid();
         foreach ($posts as $key => $value) {
             $fieldId = str_replace('field_', '', $key);
             $field = $fieldRepository->find($fieldId);
@@ -89,8 +90,7 @@ class FormController extends AbstractController
             }
 
             $anwser = new Anwser();
-            $anwser->setField($field);
-            $anwser->setValue($value);
+            $anwser->setField($field)->setValue($value)->setIdentifier($uuid);
 
             $entityManager->persist($anwser);
         }
